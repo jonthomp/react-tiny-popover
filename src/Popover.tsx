@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { findDOMNode } from 'react-dom';
 import { Constants, arrayUnique, targetPositionHasChanged, popoverInfosAreEqual } from './util';
 import { ArrowContainer } from './ArrowContainer';
 import { PopoverPortal } from './PopoverPortal';
@@ -54,7 +53,7 @@ class Popover extends React.Component<PopoverProps, PopoverState> {
     public componentDidMount() {
         window.setTimeout(() => this.willMount = false);
         const { position, isOpen } = this.props;
-        this.target = findDOMNode(this) as Element;
+        this.target = this.props.targetRef.current;
         this.positionOrder = this.getPositionPriorityOrder(position);
         this.updatePopover(isOpen);
     }
@@ -69,7 +68,7 @@ class Popover extends React.Component<PopoverProps, PopoverState> {
     }
 
     public componentDidUpdate(prevProps: PopoverProps) {
-        if (this.target == null) { this.target = findDOMNode(this) as Element; }
+        if (this.target == null) { this.target = this.props.targetRef.current; }
 
         const { isOpen: prevIsOpen, align: prevAlign, position: prevPosition, transitionDuration: prevTransitionDuration } = prevProps;
         const { isOpen, position, transitionDuration, align } = this.props;
